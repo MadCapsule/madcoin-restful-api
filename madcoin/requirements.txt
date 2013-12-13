@@ -1,0 +1,8 @@
+sudo pip install virtualenv
+sudo pip install https://github.com/pypa/virtualenv/tarball/develop
+virtualenv venv
+source venv/bin/activate
+which python
+pip install flask
+pip install epydoc
+pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python
