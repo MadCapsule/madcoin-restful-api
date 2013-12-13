@@ -7,3 +7,5 @@ These things still have to be added:
 * There are more info from the coin service that the showed here.
 
 * Finish to setup the file requirements.txt (to autoinstall all the dependecies)
+
+* Create a Vagrant enviroment to be able to spread our develop enviroment

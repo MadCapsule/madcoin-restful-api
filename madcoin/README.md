@@ -15,15 +15,38 @@ In this repo you will find everything you would need to make it works
 
 madcoin-python uses setuptools for the install script. There are no dependencies apart from Python itself.
 
+Install the virtual enviroment to start working/run on our project
+
 ```
   $ sudo pip install virtualenv
-  $ sudo pip install https://github.com/pypa/virtualenv/tarball/develop
   $ virtualenv venv
   $ source venv/bin/activate
-  $ which python
-  $ pip install flask
+```
+
+If we wanna exit from our virtual enviroment we can run 
+
+```
+  $ deactivate
+```
+With this command line we can test if our virtual enviroment is working properly 
+
+```
+$ which python
+/home/israel/Desktop/madcoin-restful-api/madcoin/venv/bin/python
+```
+
+After install our virtual enviroment we have to install our dependencies
+
+```
+  $ pip install flask #small framework to our python app
+  $ pip install simplejson #lower json controller to handle Decimal Types
+  $ pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python #Bitcoin library to comunicate our project with our bitcoind
+```
+
+If we want to generate the documentation we can run the next line:
+
+```
   $ pip install epydoc
-  $ pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python
 ```
 
 Run instructions
@@ -41,6 +64,27 @@ Do not forget to configure and run your coins server daemon first
 ```
   $ ~/.bitcoin/bitcoin.conf
   $ ./bitcoind
+```
+
+To connect our `app` to our `bitcoind` we have to run first the connect command following this URL:
+
+[connect to local]: http://127.0.0.1:5000/connectlocal
+
+Then if we wanna check the info of our coin server:
+
+[get info]: http://127.0.0.1:5000/getinfo
+
+We only have to connect ones to be able to access to the server, in the `debug mode` we can find anoying that the server is gonna reload each time we made a change that's means that we have to connect each time to the server, we can change this behavior with the following line inside the `run.py` file:
+
+```
+app.run(debug=True, host='0.0.0.0', use_reloader=False)
+
+```
+
+Instead of
+
+```
+app.run(debug=True, host='0.0.0.0')
 ```
 
 Generating documentation
@@ -69,9 +113,3 @@ Resources
 * http://flask.pocoo.org/
 * http://www.virtualenv.org/
 * https://github.com/laanwj/bitcoin-python
-
-TODO
-====
-These things still have to be added:
-
-* SSL support (including certificate verification) for managing remote coin daemons.
