@@ -5,7 +5,10 @@ from flask import request
 from bitcoinrpc.exceptions import InsufficientFunds
 
 conn = None
+connected_server = None
 
+BITCOIN_SERVER = "bitcoin"
+LITECOIN_SERVER = "litecoin"
 
 @app.route('/connectlocal')
 @app.route('/connectlocal/<filename>')
@@ -25,6 +28,25 @@ def connectlocal(filename=None):
     resp.status_code = 200
     return resp
 
+@app.route('/connectlocal/bitcoin')
+def connectlocalbitcoin():
+    """
+    Connect to default bitcoin service instance owned by this user,
+    on this machine.
+    """
+    global connected_server
+    connected_server = BITCOIN_SERVER
+    return connectlocal("~/.bitcoin/bitcoin.conf")
+
+@app.route('/connectlocal/litecoin')
+def connectlocallitecoin():
+    """
+    Connect to default litecoin service instance owned by this user,
+    on this machine.
+    """
+    global connected_server
+    connected_server = LITECOIN_SERVER
+    return connectlocal("~/.litecoin/litecoin.conf")
 
 @app.route("/connectremote/<user>/<password>/<host>/<int:port>")
 def connectremote(user, password, host, port):
