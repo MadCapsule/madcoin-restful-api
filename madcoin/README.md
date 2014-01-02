@@ -41,7 +41,15 @@ $ which python
 /home/israel/Desktop/madcoin-restful-api/madcoin/venv/bin/python
 ```
 
-After install our virtual enviroment we have to install our dependencies
+You can clone the repo using the following command:
+
+```
+  $ git clone git@bitbucket.org:madcapsulemedia/madcoin-restful-api.git
+```
+
+After install our virtual enviroment we have to install our dependencies and there are two options to do that:
+
+## First option
 
 ```
   $ pip install flask #small framework to our python app
@@ -55,10 +63,10 @@ If we want to generate the documentation we can run the next line:
   $ pip install epydoc
 ```
 
-You can clone the repo using the following command:
+## Second option
 
 ```
-  $ git clone git@bitbucket.org:madcapsulemedia/madcoin-restful-api.git
+  $ pip install -r requirements.txt
 ```
 
 Run instructions
