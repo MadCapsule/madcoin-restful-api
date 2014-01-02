@@ -102,6 +102,42 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="app.views-module.html#connectlocalbitcoin" class="summary-sig-name">connectlocalbitcoin</a>()</span><br />
+      Connect to default bitcoin service instance owned by this user, on 
+      this machine.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="app.views-pysrc.html#connectlocalbitcoin">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="app.views-module.html#connectlocallitecoin" class="summary-sig-name">connectlocallitecoin</a>()</span><br />
+      Connect to default litecoin service instance owned by this user, on 
+      this machine.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="app.views-pysrc.html#connectlocallitecoin">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="app.views-module.html#connectremote" class="summary-sig-name">connectremote</a>(<span class="summary-sig-arg">user</span>,
         <span class="summary-sig-arg">password</span>,
         <span class="summary-sig-arg">host</span>,
@@ -316,6 +352,27 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="connected_server"></a><span class="summary-name">connected_server</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="BITCOIN_SERVER"></a><span class="summary-name">BITCOIN_SERVER</span> = <code title="'bitcoin'"><code class="variable-quote">'</code><code class="variable-string">bitcoin</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="LITECOIN_SERVER"></a><span class="summary-name">LITECOIN_SERVER</span> = <code title="'litecoin'"><code class="variable-quote">'</code><code class="variable-string">litecoin</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'app'"><code class="variable-quote">'</code><code class="variable-string">app</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
@@ -364,6 +421,54 @@
     <dd><ul class="nomargin-top">
         <li><code>@app.route('/connectlocal')</code></li>
         <li><code>@app.route('/connectlocal/<filename>')</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="connectlocalbitcoin"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">connectlocalbitcoin</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="app.views-pysrc.html#connectlocalbitcoin">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Connect to default bitcoin service instance owned by this user, on 
+  this machine.</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@app.route('/connectlocal/bitcoin')</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="connectlocallitecoin"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">connectlocallitecoin</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="app.views-pysrc.html#connectlocallitecoin">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Connect to default litecoin service instance owned by this user, on 
+  this machine.</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@app.route('/connectlocal/litecoin')</code></li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -707,7 +812,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Dec 13 17:57:47 2013
+    Generated by Epydoc 3.0.1 on Thu Jan  2 11:15:13 2014
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
