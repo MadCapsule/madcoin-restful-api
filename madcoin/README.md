@@ -6,7 +6,7 @@ Documentation
 Documentation can be found here, or in the source archive. It is built
 using Epydoc:
 
-[http://epydoc.sourceforge.net/]: http://epydoc.sourceforge.net/
+[http://epydoc.sourceforge.net/](http://epydoc.sourceforge.net/)
 
 Installation instructions
 =========================
@@ -91,11 +91,11 @@ How to use it
 
 To connect our `app` to our `bitcoind` we have to run first the connect command following this URL:
 
-[connect to local]: http://127.0.0.1:5000/connectlocal
+[http://127.0.0.1:5000/connectlocal](http://127.0.0.1:5000/connectlocal)
 
 Then if we wanna check the info of our coin server:
 
-[get info]: http://127.0.0.1:5000/getinfo
+[http://127.0.0.1:5000/getinfo](http://127.0.0.1:5000/getinfo)
 
 We only have to connect ones to be able to access to the server, in the `debug mode` we can find anoying that the server is gonna reload each time we made a change that's means that we have to connect each time to the server, we can change this behavior with the following line inside the `run.py` file:
 
