@@ -91,11 +91,15 @@ How to use it
 
 To connect our `app` to our `bitcoind` we have to run first the connect command following this URL:
 
+```
 [http://127.0.0.1:5000/connectlocal](http://127.0.0.1:5000/connectlocal)
+```
 
 Then if we wanna check the info of our coin server:
 
+```
 [http://127.0.0.1:5000/getinfo](http://127.0.0.1:5000/getinfo)
+```
 
 We only have to connect ones to be able to access to the server, in the `debug mode` we can find anoying that the server is gonna reload each time we made a change that's means that we have to connect each time to the server, we can change this behavior with the following line inside the `run.py` file:
 
