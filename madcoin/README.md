@@ -13,7 +13,13 @@ Installation instructions
 
 In this repo you will find everything you would need to make it works
 
-madcoin-python uses setuptools for the install script. There are no dependencies apart from Python itself.
+madcoin-python uses `setuptools` for the install script. There are no dependencies apart from Python itself.
+
+```
+  $ sudo aptitude install python-setuptools
+  $ sudo aptitude install python-pip
+  $ sudo aptitude install git
+```
 
 Install the virtual enviroment to start working/run on our project
 
@@ -49,10 +55,16 @@ If we want to generate the documentation we can run the next line:
   $ pip install epydoc
 ```
 
+You can clone the repo using the following command:
+
+```
+  $ git clone git@bitbucket.org:madcapsulemedia/madcoin-restful-api.git
+```
+
 Run instructions
 ================
 
-Set execute rights to the `run.py` script and the execute it
+After clone the project go to `madcoin-restful-api/madcoin` folder and set execute rights to the `run.py` script and the execute it
 
 ```
   $ chmod a+x run.py
@@ -62,9 +74,12 @@ Set execute rights to the `run.py` script and the execute it
 Do not forget to configure and run your coins server daemon first
 
 ```
-  $ ~/.bitcoin/bitcoin.conf
+  $ nano ~/.bitcoin/bitcoin.conf
   $ ./bitcoind
 ```
+
+How to use it
+=============
 
 To connect our `app` to our `bitcoind` we have to run first the connect command following this URL:
 
