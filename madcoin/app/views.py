@@ -2,7 +2,7 @@ from app import app
 import bitcoinrpc
 from flask import jsonify
 from flask import request
-from bitcoinrpc.exceptions import InsufficientFunds
+from bitcoinrpc.exceptions import InsufficientFunds, JSONTypeError, InvalidAmount
 
 conn = None
 connected_server = None
@@ -141,7 +141,7 @@ def validateaddress(address):
     return resp
 
 
-@app.route("/sendtoaddress/<address>/<float:amount>", methods=['POST'])
+@app.route("/sendtoaddress/<address>/<float:amount>")
 def sendtoaddress(address, amount):
     """
     Sends a specified amount of coins to a specified address.
@@ -151,8 +151,9 @@ def sendtoaddress(address, amount):
     @type amount: float
     @param amount: Amount to be send
     """
-    conn.sendtoaddress(address, amount)
-    resp = jsonify(message="Coins sended", code="1000")
+    txid = None
+    txid = conn.sendtoaddress(address, amount)
+    resp = jsonify(message="Coins sended", txid=txid, code="1000")
     resp.status_code = 200
     return resp
 
@@ -188,8 +189,7 @@ def getreceivedbyaddress(address):
     return resp
 
 
-@app.route("/getreceivedbyaddress/<account_origin>/ \
-    <account_dest>/<float:amount>")
+@app.route("/move/<account_origin>/<account_dest>/<float:amount>")
 def move(account_origin, account_dest, amount):
     """
     Move coins from one account to another account
@@ -204,6 +204,7 @@ def move(account_origin, account_dest, amount):
     @param account_dest: Check the balance of the Address
     @type amount: float
     @param amount: Check the balance of the Address
+    @todo: We have to check first if the accounts exists
     """
     try:
         conn.move(account_origin, account_dest, amount)
@@ -217,14 +218,12 @@ def move(account_origin, account_dest, amount):
     resp.status_code = 200
     return resp
 
-
 @app.errorhandler(InsufficientFunds)
 def insufficient_funds(error=None):
     message = {'status': 404, 'message': 'Insufficient funds'}
     resp = jsonify(message)
     resp.status_code = 500
     return resp
-
 
 @app.errorhandler(404)
 def not_found(error=None):
