@@ -86,6 +86,14 @@ Do not forget to configure and run your coins server daemon first
   $ ./bitcoind
 ```
 
+Testing it
+==========
+
+If you wanna test our code you have to have the server running and runs as well the file test.py
+
+```
+  $ python test.py
+```
 How to use it
 =============
 
