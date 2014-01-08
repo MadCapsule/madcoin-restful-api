@@ -1,8 +1,14 @@
 from app import app
+import os, sys
 import bitcoinrpc
 from flask import jsonify
 from flask import request
 from bitcoinrpc.exceptions import InsufficientFunds, JSONTypeError, InvalidAmount
+
+try:
+  from flask_cors import cross_origin # support local usage without installed package
+except:
+  from flask.ext.cors import cross_origin # this is how you would normally import
 
 conn = None
 connected_server = None
@@ -29,6 +35,7 @@ def connectlocal(filename=None):
     return resp
 
 @app.route('/connectlocal/bitcoin')
+@cross_origin()
 def connectlocalbitcoin():
     """
     Connect to default bitcoin service instance owned by this user,
@@ -39,6 +46,7 @@ def connectlocalbitcoin():
     return connectlocal("~/.bitcoin/bitcoin.conf")
 
 @app.route('/connectlocal/litecoin')
+@cross_origin()
 def connectlocallitecoin():
     """
     Connect to default litecoin service instance owned by this user,
@@ -49,6 +57,7 @@ def connectlocallitecoin():
     return connectlocal("~/.litecoin/litecoin.conf")
 
 @app.route("/connectremote/<user>/<password>/<host>/<int:port>")
+@cross_origin()
 def connectremote(user, password, host, port):
     """
     Connect to remote or alternative local coin client instance.
@@ -71,6 +80,7 @@ def connectremote(user, password, host, port):
 
 
 @app.route("/")
+@cross_origin()
 def index():
     """
     Intro message to Madcoin API services.
@@ -85,6 +95,7 @@ def index():
 
 
 @app.route("/getinfo")
+@cross_origin()
 def getinfo():
     """
     Getting the coin server info.
@@ -113,6 +124,7 @@ def getinfo():
 
 
 @app.route("/getbalance")
+@cross_origin()
 def getbalance():
     """
     Getting the current balance.
@@ -122,7 +134,8 @@ def getbalance():
     return resp
 
 
-@app.route("/validateaddress/<address>", methods=['POST'])
+@app.route("/validateaddress/<address>")
+@cross_origin()
 def validateaddress(address):
     """
     Check a customer address for validity and get information about it.
@@ -132,7 +145,8 @@ def validateaddress(address):
     """
     rv = conn.validateaddress(address)
     if rv.isvalid:
-        resp = jsonify(message="The address that you provided is valid")
+        resp = jsonify(message="The address that you provided is valid", \
+            code="1000")
         resp.status_code = 200
     else:
         resp = jsonify(message="The address that you provided is invalid, \
@@ -142,6 +156,7 @@ def validateaddress(address):
 
 
 @app.route("/sendtoaddress/<address>/<float:amount>")
+@cross_origin()
 def sendtoaddress(address, amount):
     """
     Sends a specified amount of coins to a specified address.
@@ -159,6 +174,7 @@ def sendtoaddress(address, amount):
 
 
 @app.route("/getnewaddress")
+@cross_origin()
 def getnewaddress():
     """
     Get a new address for accepting payments.
@@ -171,8 +187,19 @@ def getnewaddress():
     resp.status_code = 200
     return resp
 
+@app.route("/getqraddress/<address>")
+@cross_origin()
+def function(address):
+    import base64
+    import qrcode
+    from qrcode.image.pure import PymagingImage
+    img = qrcode.make(address)
+    resp = jsonify(qrcode=base64.b64encode(img.frombuffer('RGB'), (400,600)), address=address, code="1000")
+    resp.status_code = 200
+    return resp
 
 @app.route("/getreceivedbyaddress/<address>")
+@cross_origin()
 def getreceivedbyaddress(address):
     """
     Check how much has been received at a certain address.
@@ -190,6 +217,7 @@ def getreceivedbyaddress(address):
 
 
 @app.route("/move/<account_origin>/<account_dest>/<float:amount>")
+@cross_origin()
 def move(account_origin, account_dest, amount):
     """
     Move coins from one account to another account
