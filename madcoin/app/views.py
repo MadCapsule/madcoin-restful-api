@@ -1,23 +1,22 @@
-from app import app
-import os, sys
 import bitcoinrpc
+from app import app
 from flask import jsonify
 from flask import request
-from bitcoinrpc.exceptions import InsufficientFunds, JSONTypeError, InvalidAmount
-
-try:
-  from flask_cors import cross_origin # support local usage without installed package
-except:
-  from flask.ext.cors import cross_origin # this is how you would normally import
+from flask.ext.cors import cross_origin
+from bitcoinrpc.exceptions import InsufficientFunds
+from bitcoinrpc.exceptions import JSONTypeError
+from bitcoinrpc.exceptions import InvalidAmount
 
 conn = None
-connected_server = None
 
-BITCOIN_SERVER = "bitcoin"
-LITECOIN_SERVER = "litecoin"
 
-@app.route('/connectlocal')
-@app.route('/connectlocal/<filename>')
+@app.before_first_request
+def before_first_request():
+    connectlocal(app.config['PATH_COIN_CONFIG_FILE'])
+
+
+@app.route("/connectlocal")
+@cross_origin()
 def connectlocal(filename=None):
     """
     Connect to default coin service instance owned by this user,
@@ -29,32 +28,10 @@ def connectlocal(filename=None):
     """
     global conn
     conn = bitcoinrpc.connect_to_local(filename)
-
     resp = jsonify(message="connected", code="1000")
     resp.status_code = 200
     return resp
 
-@app.route('/connectlocal/bitcoin')
-@cross_origin()
-def connectlocalbitcoin():
-    """
-    Connect to default bitcoin service instance owned by this user,
-    on this machine.
-    """
-    global connected_server
-    connected_server = BITCOIN_SERVER
-    return connectlocal("~/.bitcoin/bitcoin.conf")
-
-@app.route('/connectlocal/litecoin')
-@cross_origin()
-def connectlocallitecoin():
-    """
-    Connect to default litecoin service instance owned by this user,
-    on this machine.
-    """
-    global connected_server
-    connected_server = LITECOIN_SERVER
-    return connectlocal("~/.litecoin/litecoin.conf")
 
 @app.route("/connectremote/<user>/<password>/<host>/<int:port>")
 @cross_origin()
@@ -73,7 +50,6 @@ def connectremote(user, password, host, port):
     """
     global conn
     conn = bitcoinrpc.connect_to_remote(user, password, host=host, port=port)
-
     resp = jsonify(message="connected", code="1000")
     resp.status_code = 200
     return resp
@@ -145,8 +121,8 @@ def validateaddress(address):
     """
     rv = conn.validateaddress(address)
     if rv.isvalid:
-        resp = jsonify(message="The address that you provided is valid", \
-            code="1000")
+        resp = jsonify(message="The address that you provided is \
+            valid", code="1000")
         resp.status_code = 200
     else:
         resp = jsonify(message="The address that you provided is invalid, \
@@ -187,16 +163,6 @@ def getnewaddress():
     resp.status_code = 200
     return resp
 
-@app.route("/getqraddress/<address>")
-@cross_origin()
-def function(address):
-    import base64
-    import qrcode
-    from qrcode.image.pure import PymagingImage
-    img = qrcode.make(address)
-    resp = jsonify(qrcode=base64.b64encode(img.frombuffer('RGB'), (400,600)), address=address, code="1000")
-    resp.status_code = 200
-    return resp
 
 @app.route("/getreceivedbyaddress/<address>")
 @cross_origin()
@@ -246,12 +212,14 @@ def move(account_origin, account_dest, amount):
     resp.status_code = 200
     return resp
 
+
 @app.errorhandler(InsufficientFunds)
 def insufficient_funds(error=None):
     message = {'status': 404, 'message': 'Insufficient funds'}
     resp = jsonify(message)
     resp.status_code = 500
     return resp
+
 
 @app.errorhandler(404)
 def not_found(error=None):

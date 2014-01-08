@@ -87,6 +87,13 @@ Do not forget to configure and run your coins server daemon first
   $ ./bitcoind
 ```
 
+If you wanna run the server with your own config file you should have to create a config file first and try to load it, like that:
+
+```
+  $ export MADCOIN_CONFIG="/path/to/settings.py"
+  $python run.py
+```
+
 Testing it
 ==========
 

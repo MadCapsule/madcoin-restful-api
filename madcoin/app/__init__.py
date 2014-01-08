@@ -1,3 +1,4 @@
+import bitcoinrpc
 from flask import Flask
 from flask import jsonify
 from werkzeug.exceptions import default_exceptions
@@ -34,5 +35,7 @@ def make_json_app(import_name, **kwargs):
     return app
 
 app = make_json_app(__name__)
+app.config.from_pyfile('config.py')
+app.config.from_envvar('MADCOIN_CONFIG', silent=True)
 
 from app import views
