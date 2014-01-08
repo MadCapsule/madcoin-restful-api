@@ -53,6 +53,7 @@ After install our virtual enviroment we have to install our dependencies and the
 
 ```
   $ pip install flask #small framework to our python app
+  $ pip install flask-cors #plugin to support CORS on our flasky app
   $ pip install simplejson #lower json controller to handle Decimal Types
   $ pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python #Bitcoin library to comunicate our project with our bitcoind
 ```
