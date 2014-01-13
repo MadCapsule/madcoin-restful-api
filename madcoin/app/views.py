@@ -1,21 +1,20 @@
 import bitcoinrpc
-from app import app
-from flask import jsonify
-from flask import request
+from flask import Flask, Blueprint, current_app, jsonify, request
 from flask.ext.cors import cross_origin
-from bitcoinrpc.exceptions import InsufficientFunds
-from bitcoinrpc.exceptions import JSONTypeError
-from bitcoinrpc.exceptions import InvalidAmount
+from bitcoinrpc.exceptions import InsufficientFunds, JSONTypeError, \
+    InvalidAmount
 
 conn = None
+api = Blueprint('api', __name__)
 
 
-@app.before_first_request
-def before_first_request():
-    connectlocal(app.config['PATH_COIN_CONFIG_FILE'])
+@api.before_app_first_request
+def before_app_first_request():
+    if conn is None:
+        connectlocal(current_app.config['PATH_COIN_CONFIG_FILE'])
 
 
-@app.route("/connectlocal")
+@api.route("/connectlocal")
 @cross_origin()
 def connectlocal(filename=None):
     """
@@ -33,7 +32,7 @@ def connectlocal(filename=None):
     return resp
 
 
-@app.route("/connectremote/<user>/<password>/<host>/<int:port>")
+@api.route("/connectremote/<user>/<password>/<host>/<int:port>")
 @cross_origin()
 def connectremote(user, password, host, port):
     """
@@ -55,7 +54,7 @@ def connectremote(user, password, host, port):
     return resp
 
 
-@app.route("/")
+@api.route("/")
 @cross_origin()
 def index():
     """
@@ -65,12 +64,13 @@ def index():
         powered_by='Madcapsule Media',
         service='Welcome to Madcoin API services.',
         version=0.1,
+        coid_daemon=current_app.config['COIN_DAEMOM'],
         code="1000")
     resp.status_code = 200
     return resp
 
 
-@app.route("/getinfo")
+@api.route("/getinfo")
 @cross_origin()
 def getinfo():
     """
@@ -99,7 +99,7 @@ def getinfo():
     return resp
 
 
-@app.route("/getbalance")
+@api.route("/getbalance")
 @cross_origin()
 def getbalance():
     """
@@ -110,7 +110,7 @@ def getbalance():
     return resp
 
 
-@app.route("/validateaddress/<address>")
+@api.route("/validateaddress/<address>")
 @cross_origin()
 def validateaddress(address):
     """
@@ -131,7 +131,7 @@ def validateaddress(address):
     return resp
 
 
-@app.route("/sendtoaddress/<address>/<float:amount>")
+@api.route("/sendtoaddress/<address>/<float:amount>")
 @cross_origin()
 def sendtoaddress(address, amount):
     """
@@ -149,7 +149,7 @@ def sendtoaddress(address, amount):
     return resp
 
 
-@app.route("/getnewaddress")
+@api.route("/getnewaddress")
 @cross_origin()
 def getnewaddress():
     """
@@ -164,7 +164,7 @@ def getnewaddress():
     return resp
 
 
-@app.route("/getreceivedbyaddress/<address>")
+@api.route("/getreceivedbyaddress/<address>")
 @cross_origin()
 def getreceivedbyaddress(address):
     """
@@ -182,7 +182,7 @@ def getreceivedbyaddress(address):
     return resp
 
 
-@app.route("/move/<account_origin>/<account_dest>/<float:amount>")
+@api.route("/move/<account_origin>/<account_dest>/<float:amount>")
 @cross_origin()
 def move(account_origin, account_dest, amount):
     """
@@ -213,7 +213,7 @@ def move(account_origin, account_dest, amount):
     return resp
 
 
-@app.errorhandler(InsufficientFunds)
+@api.errorhandler(InsufficientFunds)
 def insufficient_funds(error=None):
     message = {'status': 404, 'message': 'Insufficient funds'}
     resp = jsonify(message)
@@ -221,7 +221,7 @@ def insufficient_funds(error=None):
     return resp
 
 
-@app.errorhandler(404)
+@api.errorhandler(404)
 def not_found(error=None):
     message = {'status': 404, 'message': 'Not Found: ' + request.url}
     resp = jsonify(message)

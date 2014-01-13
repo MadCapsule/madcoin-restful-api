@@ -1,11 +1,12 @@
+import os
 import bitcoinrpc
 from flask import Flask
-from flask import jsonify
+from flask import jsonify, request
+from flask import Flask, current_app
 from werkzeug.exceptions import default_exceptions
 from werkzeug.exceptions import HTTPException
 
 __all__ = ['make_json_app']
-
 
 def make_json_app(import_name, **kwargs):
     """
@@ -34,8 +35,26 @@ def make_json_app(import_name, **kwargs):
         app.error_handler_spec[None][code] = make_json_error
     return app
 
-app = make_json_app(__name__)
-app.config.from_pyfile('config.py')
-app.config.from_envvar('MADCOIN_CONFIG', silent=True)
+def get_config_for_subdomain(subdomain):
+    if subdomain == 'bitcoin':
+        return 'config/bitcoin.cfg'
+    elif subdomain == 'litecoin':
+        return 'config/litecoin.cfg'
+    else:
+        return None
 
-from app import views
+def create_app(cfg=None):
+    app = make_json_app(__name__)
+    load_config(app, cfg)
+    from app.views import api
+    app.register_blueprint(api)
+    return app
+
+def load_config(app, cfg):
+    app.config.from_pyfile('config/default.cfg')
+
+    if cfg is None and 'MADCOIN_CFG' in os.environ:
+        cfg = os.environ['MADCOIN_CFG']
+
+    if cfg is not None:
+        app.config.from_pyfile(cfg)
