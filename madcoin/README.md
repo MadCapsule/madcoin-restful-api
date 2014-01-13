@@ -91,7 +91,7 @@ If you wanna run the server with your own config file you should have to create 
 
 ```
   $ export MADCOIN_CONFIG="/path/to/settings.py"
-  $python run.py
+  $ python run.py
 ```
 
 Testing it
@@ -105,17 +105,22 @@ If you wanna test our code you have to have the server running and runs as well 
 How to use it
 =============
 
-To connect our `app` to our `bitcoind` we have to run first the connect command following this URL:
+As we are still developing this proyect you have to add to your "/etc/hosts" file the following entries
 
 ```
-http://127.0.0.1:5000/connectlocal
+SERVER_IP_ADDRESS bitcoin.mad.local
+SERVER_IP_ADDRESS litecoin.mad.local
 ```
 
 Then if we wanna check the info of our coin server:
 
 ```
-http://127.0.0.1:5000/getinfo
+http://bitcoin.mad.local:5000/getinfo
 ```
+
+#### In developemnt mode
+
+#####If we are not using `werkzeug.wsgi` wWSGI development server (only for development porpuse):
 
 We only have to connect ones to be able to access to the server, in the `debug mode` we can find anoying that the server is gonna reload each time we made a change that's means that we have to connect each time to the server, we can change this behavior with the following line inside the `run.py` file:
 
@@ -129,6 +134,10 @@ Instead of
 ```
 app.run(debug=True, host='0.0.0.0')
 ```
+Contributing
+============
+
+If you are interested in improve the code or fix some bug, your welcome just keep in mind one rule the code below was written following the `PEP8` style guide for Python code.
 
 Generating documentation
 ========================
