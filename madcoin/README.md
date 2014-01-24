@@ -53,6 +53,7 @@ After install our virtual enviroment we have to install our dependencies and the
 
 ```
   $ pip install flask #small framework to our python app
+  $ pip install uwsgi #this is the server to host our app in production mode
   $ pip install flask-cors #plugin to support CORS on our flasky app
   $ pip install simplejson #lower json controller to handle Decimal Types
   $ pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python #Bitcoin library to comunicate our project with our bitcoind
@@ -72,6 +73,20 @@ If we want to generate the documentation we can run the next line:
 
 Run instructions
 ================
+
+#### In production
+
+To run our app we are going to use `uWSGI` using the following command:
+
+```
+uwsgi --socket 0.0.0.0:5000 --wsgi-file run_pro.py --callable app --processes 4 --threads 2 --stats 127.0.0.1:9191 --protocol=http
+```
+
+That's allow us to access our app on `SERVER_URL:5000` and to access locally to a log JSON file on `127.0.0.1:9191`
+
+> Is important to notice that for the production enviroment we are using a different `run.py` file that for development porpouse
+
+#### In developemnt mode
 
 After clone the project go to `madcoin-restful-api/madcoin` folder and set execute rights to the `run.py` script and the execute it
 
@@ -94,16 +109,19 @@ If you wanna run the server with your own config file you should have to create 
   $ python run.py
 ```
 
-Testing it
-==========
 
-If you wanna test our code you have to have the server running and runs as well the file test.py
-
-```
-  $ python test.py
-```
 How to use it
 =============
+
+#### In production
+
+We are gonna use uWSGI to deploy our app and that's should be enought to know, you only need to access to the server address on the config port as:
+
+```
+    SERVER_URL:5000/getinfo
+```
+
+#### In development
 
 As we are still developing this proyect you have to add to your "/etc/hosts" file the following entries
 
@@ -117,8 +135,6 @@ Then if we wanna check the info of our coin server:
 ```
 http://bitcoin.mad.local:5000/getinfo
 ```
-
-#### In developemnt mode
 
 #####If we are not using `werkzeug.wsgi` wWSGI development server (only for development porpuse):
 
@@ -134,6 +150,16 @@ Instead of
 ```
 app.run(debug=True, host='0.0.0.0')
 ```
+
+Testing it
+==========
+
+If you wanna test our code you have to have the server running and runs as well the file test.py
+
+```
+  $ python test.py
+```
+
 Contributing
 ============
 

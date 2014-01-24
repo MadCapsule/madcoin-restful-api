@@ -1,9 +1,6 @@
 #!venv/bin/python
 import sys
 from threading import Lock
-from werkzeug.serving import run_simple
-from werkzeug.exceptions import NotFound
-from werkzeug.wsgi import pop_path_info, peek_path_info
 from app import create_app, get_config_for_subdomain
 
 
@@ -39,6 +36,3 @@ def make_app(subdomain):
     return create_app(config)
 
 app = SubdomainDispatcher('mad.local', make_app)
-
-run_simple('0.0.0.0', 5000, app, use_reloader=True, use_debugger=True,
-           use_evalex=True)
