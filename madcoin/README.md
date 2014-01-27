@@ -59,6 +59,12 @@ After install our virtual enviroment we have to install our dependencies and the
   $ pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python #Bitcoin library to comunicate our project with our bitcoind
 ```
 
+If you are having troubles installing bitcoin-python from `git` you can try with this command instead the above:
+
+```
+  $ pip install -e git+https://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python
+```
+
 If we want to generate the documentation we can run the next line:
 
 ```

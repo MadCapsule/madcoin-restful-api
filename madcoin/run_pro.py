@@ -1,6 +1,7 @@
 #!venv/bin/python
 import sys
 from threading import Lock
+from werkzeug.exceptions import NotFound
 from app import create_app, get_config_for_subdomain
 
 
@@ -29,10 +30,11 @@ class SubdomainDispatcher(object):
 
 
 def make_app(subdomain):
+    print subdomain
     config = get_config_for_subdomain(subdomain)
     if config is None:
         return NotFound()
 
     return create_app(config)
 
-app = SubdomainDispatcher('mad.local', make_app)
+app = SubdomainDispatcher('madcapsule.com', make_app)
