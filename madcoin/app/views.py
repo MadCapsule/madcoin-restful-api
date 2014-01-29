@@ -4,15 +4,25 @@ from flask.ext.cors import cross_origin
 from bitcoinrpc.exceptions import InsufficientFunds, JSONTypeError, \
     InvalidAmount
 
+
 conn = None
+server = ""
 api = Blueprint('api', __name__)
 
 
-@api.before_app_first_request
-def before_app_first_request():
-    if conn is None:
-        connectlocal(current_app.config['PATH_COIN_CONFIG_FILE'])
+@api.before_app_request
+def before_app_request():
+    global server
+    print "server: " + server
+    print "coin daemon: " + current_app.config['COIN_DAEMOM']
 
+    if conn is None:
+        server = current_app.config['COIN_DAEMOM']
+        connectlocal(current_app.config['PATH_COIN_CONFIG_FILE'])
+    elif server is not current_app.config['COIN_DAEMOM']:
+        print "connect"
+        server = current_app.config['COIN_DAEMOM']
+        connectlocal(current_app.config['PATH_COIN_CONFIG_FILE'])
 
 @api.route("/connectlocal")
 @cross_origin()
