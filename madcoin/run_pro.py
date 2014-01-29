@@ -30,7 +30,6 @@ class SubdomainDispatcher(object):
 
 
 def make_app(subdomain):
-    print subdomain
     config = get_config_for_subdomain(subdomain)
     if config is None:
         return NotFound()
