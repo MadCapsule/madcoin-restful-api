@@ -5,3 +5,5 @@ These things still have to be added:
 * Finish to implements calls from others bitcoind JSON-RPC methods
 
 * Create a Vagrant enviroment to be able to spread our develop enviroment
+
+* Add a logg system into our app
