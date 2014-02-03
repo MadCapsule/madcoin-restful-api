@@ -7,3 +7,5 @@ These things still have to be added:
 * Create a Vagrant enviroment to be able to spread our develop enviroment
 
 * Add a logg system into our app
+
+* Add support to send the data throught body of the request instead of the header as a parameters
