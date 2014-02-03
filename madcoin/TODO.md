@@ -9,3 +9,5 @@ These things still have to be added:
 * Add a logg system into our app
 
 * Add support to send the data throught body of the request instead of the header as a parameters
+
+* Add support to generate bitcoin address as a QR code
