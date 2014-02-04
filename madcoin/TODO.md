@@ -13,3 +13,5 @@ These things still have to be added:
 * Add support to generate bitcoin address as a QR code
 
 * Generate the documentation and upload it to some place to have it online
+
+* We have to convert the address list in getconfirmationsbyaddress into a jsonify object

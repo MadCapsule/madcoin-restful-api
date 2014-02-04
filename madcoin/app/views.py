@@ -1,3 +1,4 @@
+import settings
 import bitcoinrpc
 from flask import Flask, Blueprint, current_app, jsonify, request
 from flask.ext.cors import cross_origin
@@ -13,16 +14,13 @@ api = Blueprint('api', __name__)
 @api.before_app_request
 def before_app_request():
     global server
-    print "server: " + server
-    print "coin daemon: " + current_app.config['COIN_DAEMOM']
-
     if conn is None:
         server = current_app.config['COIN_DAEMOM']
         connectlocal(current_app.config['PATH_COIN_CONFIG_FILE'])
     elif server is not current_app.config['COIN_DAEMOM']:
-        print "connect"
         server = current_app.config['COIN_DAEMOM']
         connectlocal(current_app.config['PATH_COIN_CONFIG_FILE'])
+
 
 @api.route("/connectlocal")
 @cross_origin()
@@ -37,7 +35,7 @@ def connectlocal(filename=None):
     """
     global conn
     conn = bitcoinrpc.connect_to_local(filename)
-    resp = jsonify(message="connected", code="1000")
+    resp = jsonify(code="1000", message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -59,7 +57,7 @@ def connectremote(user, password, host, port):
     """
     global conn
     conn = bitcoinrpc.connect_to_remote(user, password, host=host, port=port)
-    resp = jsonify(message="connected", code="1000")
+    resp = jsonify(code="1000", message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -75,7 +73,8 @@ def index():
         service='Welcome to Madcoin API services.',
         version=0.1,
         coid_daemon=current_app.config['COIN_DAEMOM'],
-        code="1000")
+        code="1000",
+        message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -104,7 +103,8 @@ def getinfo():
         balance=info.balance,
         keypoololdest=info.keypoololdest,
         keypoolsize=info.keypoolsize,
-        code="1000")
+        code="1000",
+        message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -115,7 +115,8 @@ def getbalance():
     """
     Getting the current balance.
     """
-    resp = jsonify(balance=conn.getbalance(), code="1000")
+    resp = jsonify(
+        balance=conn.getbalance(), code="1000", message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -131,12 +132,11 @@ def validateaddress(address):
     """
     rv = conn.validateaddress(address)
     if rv.isvalid:
-        resp = jsonify(message="The address that you provided is \
-            valid", code="1000")
+        resp = jsonify(code="1000", message=settings.OK_1000)
         resp.status_code = 200
     else:
-        resp = jsonify(message="The address that you provided is invalid, \
-            please correct", code="1001")
+        resp = jsonify(
+            code="1001", message=settings.ERROR_ADDRESS_INVALID_1001)
         resp.status_code = 500
     return resp
 
@@ -154,7 +154,7 @@ def sendtoaddress(address, amount):
     """
     txid = None
     txid = conn.sendtoaddress(address, amount)
-    resp = jsonify(message="Coins sended", txid=txid, code="1000")
+    resp = jsonify(txid=txid, code="1000", message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -169,7 +169,8 @@ def getnewaddress():
     Give this address to the customer and store it in a safe place,
     to be able to check when the payment to this address has been made.
     """
-    resp = jsonify(address=conn.getnewaddress(), code="1000")
+    resp = jsonify(
+        address=conn.getnewaddress(), code="1000", message=settings.OK_1000)
     resp.status_code = 200
     return resp
 
@@ -187,8 +188,44 @@ def getreceivedbyaddress(address):
     @type address: string
     @param address: Check the balance of the Address
     """
-    resp = jsonify(amount=conn.getreceivedbyaddress(address), code="1000")
+    resp = jsonify(
+        amount=conn.getreceivedbyaddress(address), code="1000",
+        message=settings.OK_1000)
     resp.status_code = 200
+    return resp
+
+
+@api.route("/getconfirmationsbyaddress/", defaults={'address': None})
+@api.route("/getconfirmationsbyaddress/<address>")
+@cross_origin()
+def getconfirmationsbyaddress(address):
+    """
+    Returns the number of confirmations of the address given.
+
+    @type address: string
+    @param address: Address to check the num of confirmations
+    @todo: We have to convert this address list into a jsonify object
+    """
+    listreceivedbyaddress = conn.listreceivedbyaddress(1, True)
+
+    if address is None:
+        resp = jsonify(
+            address=listreceivedbyaddress, code="1000",
+            message=settings.OK_1000)
+        resp.status_code = 200
+        return resp
+
+    for address_info in listreceivedbyaddress:
+        if address in address_info.address:
+            resp = jsonify(
+                confirmations=address_info.confirmations, code="1000",
+                message=settings.OK_1000)
+            resp.status_code = 200
+        else:
+            resp = jsonify(
+                code="1003", message=settings.ERROR_ADDRESS_NOT_FOUND_1003)
+            resp.status_code = 500
+
     return resp
 
 
@@ -213,12 +250,13 @@ def move(account_origin, account_dest, amount):
     try:
         conn.move(account_origin, account_dest, amount)
     except InsufficientFunds:
-        resp = jsonify(message="Account does not have enough funds  \
-            available!", code="1002")
+        resp = jsonify(
+            code="1002",
+            message=settings.ERROR_ACCOUNT_NO_FUNDS_AVAILABLE_1002)
         resp.status_code = 500
         return resp
 
-    resp = jsonify(message="Coins moved", code="1000")
+    resp = jsonify(code="1000", message=settings.OK_1000)
     resp.status_code = 200
     return resp
 

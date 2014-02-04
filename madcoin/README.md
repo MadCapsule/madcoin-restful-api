@@ -190,6 +190,7 @@ Errors Codes
 * 1000 - OK (no error)
 * 1001 - The address that you provided is invalid
 * 1002 - Account does not have enough funds available
+* 1003 - Address provided was not found
 
 Resources
 =========
