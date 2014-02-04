@@ -11,3 +11,5 @@ These things still have to be added:
 * Add support to send the data throught body of the request instead of the header as a parameters
 
 * Add support to generate bitcoin address as a QR code
+
+* Generate the documentation and upload it to some place to have it online
