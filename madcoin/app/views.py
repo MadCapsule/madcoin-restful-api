@@ -137,7 +137,7 @@ def validateaddress(address):
     else:
         resp = jsonify(
             code="1001", message=settings.ERROR_ADDRESS_INVALID_1001)
-        resp.status_code = 500
+        resp.status_code = 200
     return resp
 
 
@@ -210,21 +210,24 @@ def getconfirmationsbyaddress(address):
 
     if address is None:
         resp = jsonify(
-            address=listreceivedbyaddress, code="1000",
-            message=settings.OK_1000)
+            code="1003",
+            message=settings.ERROR_ADDRESS_NOT_FOUND_1003)
         resp.status_code = 200
         return resp
 
     for address_info in listreceivedbyaddress:
         if address in address_info.address:
+            print address_info.address
+            print address_info.confirmations
             resp = jsonify(
                 confirmations=address_info.confirmations, code="1000",
                 message=settings.OK_1000)
             resp.status_code = 200
+            return resp
         else:
             resp = jsonify(
                 code="1003", message=settings.ERROR_ADDRESS_NOT_FOUND_1003)
-            resp.status_code = 500
+            resp.status_code = 200
 
     return resp
 
@@ -253,7 +256,7 @@ def move(account_origin, account_dest, amount):
         resp = jsonify(
             code="1002",
             message=settings.ERROR_ACCOUNT_NO_FUNDS_AVAILABLE_1002)
-        resp.status_code = 500
+        resp.status_code = 200
         return resp
 
     resp = jsonify(code="1000", message=settings.OK_1000)
