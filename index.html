@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Madcoin-restful-api by MadCapsule</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Madcoin-restful-api</h1>
+        <p>Madcoin RestFul API services to control our coins daemons (Bitcoind or Litecoind)</p>
+
+        <p class="view"><a href="https://github.com/MadCapsule/madcoin-restful-api">View the Project on GitHub <small>MadCapsule/madcoin-restful-api</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/MadCapsule/madcoin-restful-api/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/MadCapsule/madcoin-restful-api/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/MadCapsule/madcoin-restful-api">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>madcoin-python is a set of Python libraries that allows easy access to the bitcoin peer-to-peer cryptocurrency client API throw a Restful API.</p>
+
+<h1>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h1>
+
+<p>Documentation can be found here, or in the source archive. It is built
+using Epydoc:</p>
+
+<p><a href="http://epydoc.sourceforge.net/">http://epydoc.sourceforge.net/</a></p>
+
+<h1>
+<a name="installation-instructions" class="anchor" href="#installation-instructions"><span class="octicon octicon-link"></span></a>Installation instructions</h1>
+
+<p>In this repo you will find everything you would need to make it works</p>
+
+<p>madcoin-python uses <code>setuptools</code> for the install script. There are no dependencies apart from Python itself.</p>
+
+<pre><code>  $ sudo aptitude install python-setuptools
+  $ sudo aptitude install python-pip
+  $ sudo aptitude install git
+</code></pre>
+
+<p>Install the virtual enviroment to start working/run on our project</p>
+
+<pre><code>  $ sudo pip install virtualenv
+  $ virtualenv venv
+  $ source venv/bin/activate
+</code></pre>
+
+<p>If we wanna exit from our virtual enviroment we can run </p>
+
+<pre><code>  $ deactivate
+</code></pre>
+
+<p>With this command line we can test if our virtual enviroment is working properly </p>
+
+<pre><code>$ which python
+/home/israel/Desktop/madcoin-restful-api/madcoin/venv/bin/python
+</code></pre>
+
+<p>You can clone the repo using the following command:</p>
+
+<pre><code>  $ git clone git@bitbucket.org:madcapsulemedia/madcoin-restful-api.git
+</code></pre>
+
+<p>After install our virtual enviroment we have to install our dependencies and there are two options to do that:</p>
+
+<h2>
+<a name="first-option" class="anchor" href="#first-option"><span class="octicon octicon-link"></span></a>First option</h2>
+
+<pre><code>  $ pip install flask #small framework to our python app
+  $ pip install uwsgi #this is the server to host our app in production mode
+  $ pip install flask-cors #plugin to support CORS on our flasky app
+  $ pip install simplejson #lower json controller to handle Decimal Types
+  $ pip install -e git://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python #Bitcoin library to comunicate our project with our bitcoind
+</code></pre>
+
+<p>If you are having troubles installing bitcoin-python from <code>git</code> you can try with this command instead the above:</p>
+
+<pre><code>  $ pip install -e git+https://github.com/laanwj/bitcoin-python.git#egg=bitcoin-python
+</code></pre>
+
+<p>If we want to generate the documentation we can run the next line:</p>
+
+<pre><code>  $ pip install epydoc
+</code></pre>
+
+<h2>
+<a name="second-option" class="anchor" href="#second-option"><span class="octicon octicon-link"></span></a>Second option</h2>
+
+<pre><code>  $ pip install -r requirements.txt
+</code></pre>
+
+<h1>
+<a name="run-instructions" class="anchor" href="#run-instructions"><span class="octicon octicon-link"></span></a>Run instructions</h1>
+
+<h4>
+<a name="in-production" class="anchor" href="#in-production"><span class="octicon octicon-link"></span></a>In production</h4>
+
+<p>To run our app we are going to use <code>uWSGI</code> using the following command:</p>
+
+<pre><code>uwsgi --socket 0.0.0.0:5000 --wsgi-file run_pro.py --callable app --processes 4 --threads 2 --stats 127.0.0.1:9191 --protocol=http
+</code></pre>
+
+<p>That's allow us to access our app on <code>SERVER_URL:5000</code> and to access locally to a log JSON file on <code>127.0.0.1:9191</code></p>
+
+<blockquote>
+<p>Is important to notice that for the production enviroment we are using a different <code>run.py</code> file that for development porpouse</p>
+</blockquote>
+
+<h4>
+<a name="in-developemnt-mode" class="anchor" href="#in-developemnt-mode"><span class="octicon octicon-link"></span></a>In developemnt mode</h4>
+
+<p>After clone the project go to <code>madcoin-restful-api/madcoin</code> folder and set execute rights to the <code>run.py</code> script and the execute it</p>
+
+<pre><code>  $ chmod a+x run.py
+  $ python run.py
+</code></pre>
+
+<p>Do not forget to configure and run your coins server daemon first</p>
+
+<pre><code>  $ nano ~/.bitcoin/bitcoin.conf
+  $ ./bitcoind
+</code></pre>
+
+<p>If you wanna run the server with your own config file you should have to create a config file first and try to load it, like that:</p>
+
+<pre><code>  $ export MADCOIN_CONFIG="/path/to/settings.py"
+  $ python run.py
+</code></pre>
+
+<h1>
+<a name="how-to-use-it" class="anchor" href="#how-to-use-it"><span class="octicon octicon-link"></span></a>How to use it</h1>
+
+<h4>
+<a name="in-production-1" class="anchor" href="#in-production-1"><span class="octicon octicon-link"></span></a>In production</h4>
+
+<p>We are gonna use uWSGI to deploy our app and that's should be enought to know, you only need to access to the server address on the config port as:</p>
+
+<pre><code>    SERVER_URL:5000/getinfo
+</code></pre>
+
+<h4>
+<a name="in-development" class="anchor" href="#in-development"><span class="octicon octicon-link"></span></a>In development</h4>
+
+<p>As we are still developing this proyect you have to add to your "/etc/hosts" file the following entries</p>
+
+<pre><code>SERVER_IP_ADDRESS bitcoin.mad.local
+SERVER_IP_ADDRESS litecoin.mad.local
+</code></pre>
+
+<p>Then if we wanna check the info of our coin server:</p>
+
+<pre><code>http://bitcoin.mad.local:5000/getinfo
+</code></pre>
+
+<h5>
+<a name="if-we-are-not-using-werkzeugwsgi-wwsgi-development-server-only-for-development-porpuse" class="anchor" href="#if-we-are-not-using-werkzeugwsgi-wwsgi-development-server-only-for-development-porpuse"><span class="octicon octicon-link"></span></a>If we are not using <code>werkzeug.wsgi</code> wWSGI development server (only for development porpuse):</h5>
+
+<p>We only have to connect ones to be able to access to the server, in the <code>debug mode</code> we can find anoying that the server is gonna reload each time we made a change that's means that we have to connect each time to the server, we can change this behavior with the following line inside the <code>run.py</code> file:</p>
+
+<pre><code>app.run(debug=True, host='0.0.0.0', use_reloader=False)
+
+</code></pre>
+
+<p>Instead of</p>
+
+<pre><code>app.run(debug=True, host='0.0.0.0')
+</code></pre>
+
+<h1>
+<a name="testing-it" class="anchor" href="#testing-it"><span class="octicon octicon-link"></span></a>Testing it</h1>
+
+<p>If you wanna test our code you have to have the server running and runs as well the file test.py</p>
+
+<pre><code>  $ python test.py
+</code></pre>
+
+<h1>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h1>
+
+<p>If you are interested in improve the code or fix some bug, your welcome just keep in mind one rule the code below was written following the <code>PEP8</code> style guide for Python code.</p>
+
+<h1>
+<a name="generating-documentation" class="anchor" href="#generating-documentation"><span class="octicon octicon-link"></span></a>Generating documentation</h1>
+
+<p>There are a config file <code>epydoc.conf</code> for generate the documentation using <code>epydoc</code></p>
+
+<p>With the following code we generate our documentation in the <code>apidocs</code> folder</p>
+
+<p>To generate the documentation you should have all our project dependencies installed in the main system because a bug between virtualenv and epydoc</p>
+
+<pre><code>  $ epydoc --config epydoc.conf
+</code></pre>
+
+<h1>
+<a name="errors-codes" class="anchor" href="#errors-codes"><span class="octicon octicon-link"></span></a>Errors Codes</h1>
+
+<ul>
+<li>1000 - OK (no error)</li>
+<li>1001 - The address that you provided is invalid</li>
+<li>1002 - Account does not have enough funds available</li>
+<li>1003 - Address provided was not found</li>
+</ul><h1>
+<a name="resources" class="anchor" href="#resources"><span class="octicon octicon-link"></span></a>Resources</h1>
+
+<ul>
+<li><a href="http://flask.pocoo.org/">http://flask.pocoo.org/</a></li>
+<li><a href="http://www.virtualenv.org/">http://www.virtualenv.org/</a></li>
+<li><a href="https://github.com/laanwj/bitcoin-python">https://github.com/laanwj/bitcoin-python</a></li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/MadCapsule">MadCapsule</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
